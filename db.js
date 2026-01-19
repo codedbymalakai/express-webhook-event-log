@@ -5,6 +5,8 @@ import Database from "better-sqlite3";
 const DB_PATH = "./data/app.db"
 const SCHEMA_PATH = path.join(process.cwd(), "schema.sql")
 
+if (!fs.existsSync("./data")) fs.mkdirSync("./data");
+
 export const db = new Database(DB_PATH)
 
 export function initDb() {
