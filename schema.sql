@@ -7,10 +7,11 @@ CREATE TABLE IF NOT EXISTS events (
   headers TEXT NOT NULL,
   payload TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'received',
-  error TEXT
-  
+  error TEXT,
+
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE INDEX IF NOT EXISTS idx_events_start_time ON events(start_time);
+CREATE INDEX IF NOT EXISTS idx_events_receivedAt ON events(receivedAt);
+CREATE INDEX IF NOT EXISTS idx_events_status ON events(status);
