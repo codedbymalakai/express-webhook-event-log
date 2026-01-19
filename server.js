@@ -13,7 +13,9 @@ app.get("/health", (req, res) => {
 })
 
 app.post("/webhooks/hubspot", (req, res) => {
+    console.log("headers:", req.headers["content-type"]);
     console.log(req.body)
+    res.sendStatus(200);
 })
 
 app.listen(port, () => {
