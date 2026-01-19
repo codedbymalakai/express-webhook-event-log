@@ -4,10 +4,9 @@
   "description": "Webhook receiver + event logging API built with Express and SQLite",
   "main": "index.js",
   "scripts": {
-  "dev": "nodemon server.js",
-  "start": "node server.js"
-}
-,
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codedbymalakai/express-webhook-event-log.git"
@@ -21,6 +20,7 @@
   },
   "homepage": "https://github.com/codedbymalakai/express-webhook-event-log#readme",
   "dependencies": {
+    "better-sqlite3": "^12.6.2",
     "express": "^5.2.1"
   },
   "devDependencies": {
