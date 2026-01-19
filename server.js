@@ -1,6 +1,9 @@
-const express = require("express")
+import { initDb } from "./db.js"
+import express from "express"
 const app = express()
 const port = 3000
+
+initDb();
 
 app.use(express.json())
 
