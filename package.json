@@ -4,8 +4,10 @@
   "description": "Webhook receiver + event logging API built with Express and SQLite",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "dev": "nodemon server.js",
+  "start": "node server.js"
+}
+,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codedbymalakai/express-webhook-event-log.git"
