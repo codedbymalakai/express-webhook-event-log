@@ -1,4 +1,4 @@
-import { initDb } from "./db.js"
+import { initDb, db } from "./db.js"
 import express from "express"
 const app = express()
 const port = 3000
@@ -16,24 +16,27 @@ app.get("/health", (req, res) => {
 })
 
 app.post("/webhooks/hubspot", (req, res) => {
-    const receivedAt = new Date().toISOString()
-    const source = 'hubspot'
-    const headers = JSON.stringify(req.headers ?? {})
-    const payload = JSON.stringify(req.body ?? {})
-    const status = "received"
+    try {
+        const receivedAt = new Date().toISOString()
+        const source = 'hubspot'
+        const headers = JSON.stringify(req.headers ?? {})
+        const payload = JSON.stringify(req.body ?? {})
+        const status = "received"
 
-    const statement = (`INSERT INTO events (receivedAt, source, headers, payload, status)
+        const statement = db.prepare(`INSERT INTO events (receivedAt, source, headers, payload, status)
         VALUES (?, ?, ?, ?, ?)
         `)
 
-    const result = statement.run(receivedAt, source, headers, payload, status);
+        const result = statement.run(receivedAt, source, headers, payload, status);
 
-    res.status(200).json({ok: true, id: result.lastInsertRowid})
+        res.status(200).json({ok: true, id: result.lastInsertRowid})
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ ok: false, error: "DB insert failed" });
+    }
+    
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
 
 app.get("/events", (req, res) => {
   const rows = db
@@ -76,3 +79,8 @@ app.get("/events/:id", (req, res) => {
     payload: safeParse(row.payload),
   });
 });
+
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
