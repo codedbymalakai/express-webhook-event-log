@@ -26,7 +26,7 @@ app.post("/webhooks/hubspot", (req, res) => {
         VALUES (?, ?, ?, ?, ?)
         `)
 
-    const result = statement.substring(receivedAt, source, headers, payload, status);
+    const result = statement.run(receivedAt, source, headers, payload, status);
 
     res.status(200).json({ok: true, id: result.lastInsertRowid})
 })
