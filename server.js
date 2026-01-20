@@ -12,13 +12,23 @@ app.get("/", (req, res) => {
 })
 
 app.get("/health", (req, res) => {
-    res.send({ok: true})
+    res.json({ok: true})
 })
 
 app.post("/webhooks/hubspot", (req, res) => {
-    console.log("headers:", req.headers["content-type"]);
-    console.log(req.body)
-    res.sendStatus(200);
+    const receivedAt = new Date().toISOString()
+    const source = 'hubspot'
+    const headers = JSON.stringify(req.headers ?? {})
+    const payload = JSON.stringify(req.body ?? {})
+    const status = "received"
+
+    const statement = (`INSERT INTO events (receivedAt, source, headers, payload, status)
+        VALUES (?, ?, ?, ?, ?)
+        `)
+
+    const result = statement.substring(receivedAt, source, headers, payload, status);
+
+    res.status(200).json({ok: true, id: result.lastInsertRowid})
 })
 
 app.listen(port, () => {

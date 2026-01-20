@@ -141,3 +141,5 @@ vite.config.ts.timestamp-*
 ## DB
 *.db
 *.db-journal
+
+-- SQLite.sql
