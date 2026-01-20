@@ -34,3 +34,45 @@ app.post("/webhooks/hubspot", (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+app.get("/events", (req, res) => {
+  const rows = db
+    .prepare(
+      `
+      SELECT id, receivedAt, source, status, error
+      FROM events
+      ORDER BY id DESC
+      LIMIT 50
+      `
+    )
+    .all();
+
+  res.json({ count: rows.length, results: rows });
+});
+
+app.get("/events/:id", (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) return res.status(400).json({ error: "Invalid id" });
+
+  const row = db
+    .prepare(
+      `
+      SELECT id, receivedAt, source, headers, payload, status, error
+      FROM events
+      WHERE id = ?
+      `
+    )
+    .get(id);
+
+  if (!row) return res.status(404).json({ error: "Not found" });
+
+  const safeParse = (s) => {
+    try { return JSON.parse(s); } catch { return s; }
+  };
+
+  res.json({
+    ...row,
+    headers: safeParse(row.headers),
+    payload: safeParse(row.payload),
+  });
+});
